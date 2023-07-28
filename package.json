@@ -1,12 +1,13 @@
 {
-  "name": "Rogue CLI",
+  "name": "rogue_cli",
+  "type": "module",
   "script": {
-    "start": "",
-    "test": ""
+    "build": "node build/build.js",
+    "start": "node bin/index.js",
   },
   "packageManager": "yarn@3.6.1",
   "dependencies": {
-    "jest": "^29.6.2",
+    "esbuild": "^0.18.17",
     "typescript": "^5.1.6"
   }
 }
