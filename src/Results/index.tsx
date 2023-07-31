@@ -6,7 +6,7 @@ interface ResultsProps {
     returnBack(): void;
 };
 
-const showResult = ({isWon, slainBy, floor}: GameResult): string => `${isWon ? `Player won` : `Player slayed by ${slainBy}`}  on floor ${floor}.`;
+const showResult = ({isWon, slainBy, floor}: GameResult): string => `${isWon ? `Player won by reaching ` : `Player was slayed by ${slainBy} on `}  floor ${floor}.`;
 
 export const Results = ({returnBack, results}: ResultsProps) => <>
 <div onClick={returnBack}>Back</div>
