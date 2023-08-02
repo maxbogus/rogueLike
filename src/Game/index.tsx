@@ -106,14 +106,17 @@ export const Game = ({returnBack, submitResult}: GameProps) => {
             submitResult({isWon: true, floor: game.floor, date: new Date()});
             returnBack();
         }
+        if (player.lives <= 0) {
+            submitResult({isWon: false, slainBy: 'ghoul', floor: game.floor, date: new Date()});
+            returnBack();
+        }
     };
 
     return <>
             <div onClick={returnBack}>Back</div>
-            <div onClick={() => {submitResult({isWon: false, slainBy: 'ghoul', floor: game.floor, date: new Date()})}}>Lose</div>
-            <div onClick={() => {submitResult({isWon: true, floor: game.floor, date: new Date()})}}>Win</div>
             <p />
-            <div>Status: Lives: {player.lives}. Floor: {game.floor}</div>
+            <h2>Status</h2>
+            <div>Lives: {player.lives}. Floor: {game.floor}</div>
             <p />
             <div>
             {gameMap.map((row, rowIndex) => 

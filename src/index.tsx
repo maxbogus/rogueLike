@@ -9,7 +9,7 @@ import { Game } from './Game';
 const menuItems = ['Game', 'Results', 'Help'];
 
 const App = () => {
-    const [selectedState, updateState] = useState<string>(menuItems[0]);
+    const [selectedState, updateState] = useState<string>('Menu');
     const [results, updateResults] = useState<GameResult[]>([]);
 
     const renderMenu = () => <>
