@@ -14,6 +14,10 @@ interface GameState {
     lives: number;
     attack: number;
     defence: number;
+    position: {
+        x: number;
+        y: number;
+    }
  }
 
 const gameMap = [
@@ -29,59 +33,80 @@ const gameMap = [
 ];
 
 export const Game = ({returnBack, submitResult}: GameProps) => {
-    const [XCoord, updateXCoord] = useState<number>(0);
-    const [YCoord, updateYCoord] = useState<number>(0);
-    const [player, updatePlayer] = useState<PlayerState>({lives: 10, attack: 2, defence: 2});
+    const [player, updatePlayer] = useState<PlayerState>({lives: 10, attack: 2, defence: 2, position: {x: 0, y: 0}});
     const [game, updateGame] = useState<GameState>({floor: 0});
     const exitCoordinates = [4, 4];
 
     document.onkeydown = function(evt) {
+        const {position: {x, y}} = player;
         evt = evt || window.event;
         if (evt.ctrlKey && evt.keyCode == 90) {
             alert("Ctrl-Z");
         }
         switch (evt.key) {
             case 'ArrowDown':
-                if (YCoord < 8) {
-                    updateYCoord(YCoord + 1);
+                if (y < 8) {
+                    updatePlayer({
+                        ...player,
+                        position: {
+                            ...player.position,
+                            y: y + 1
+                        }
+                    });
                 }
                 break;
             case 'ArrowUp':
-                if (YCoord > 0) {
-                    updateYCoord(YCoord - 1);
+                if (y > 0) {
+                    updatePlayer({
+                        ...player,
+                        position: {
+                            ...player.position,
+                            y: y - 1
+                        }
+                    });
                 }
                 break;
             case 'ArrowLeft':
-                if (XCoord > 0) {
-                    updateXCoord(XCoord - 1);
+                if (x > 0) {
+                    updatePlayer({
+                        ...player,
+                        position: {
+                            ...player.position,
+                            x: x - 1
+                        }
+                    });
                 }
                 break;
             case 'ArrowRight':
-                if (XCoord < 8) {
-                    updateXCoord(XCoord + 1);
+                if (x < 8) {
+                    updatePlayer({
+                        ...player,
+                        position: {
+                            ...player.position,
+                            x: x + 1
+                        }
+                    });
                 }
                 break;
             default:
                 console.log('unsupported key')
                 break;
         }
-        if (XCoord === exitCoordinates[0] && YCoord === exitCoordinates[1]) {
+        if (x === exitCoordinates[0] && y === exitCoordinates[1]) {
             updateGame({floor: game.floor+1});
-            updateXCoord(0);
-            updateYCoord(0);
+            updatePlayer({
+                ...player,
+                position: {
+                    y: 0,
+                    x: 0
+                }
+            });
         }
         if (game.floor === 2) {
             submitResult({isWon: true, floor: game.floor, date: new Date()});
             returnBack();
         }
     };
-
-    const drawTiles = (xCoord, yCoord) => {
-        if (YCoord === xCoord && XCoord === yCoord) {
-            
-        }
-
-    }
 
     return <>
             <div onClick={returnBack}>Back</div>
@@ -94,7 +119,7 @@ export const Game = ({returnBack, submitResult}: GameProps) => {
             {gameMap.map((row, rowIndex) => 
                 <div key={rowIndex}>
                     {
-                        row.map((block, columnIndex) => <span key={columnIndex}>{(YCoord === rowIndex && XCoord === columnIndex) ? '@' : '0'}</span>)
+                        row.map((block, columnIndex) => <span key={columnIndex}>{(player.position.y === rowIndex && player.position.x === columnIndex) ? '@' : '0'}</span>)
                     }
                 </div>
             )}
