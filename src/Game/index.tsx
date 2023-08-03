@@ -23,12 +23,8 @@ export const Game = ({returnBack, submitResult}: GameProps) => {
     const [game, updateGame] = useState<GameState>({floor: 0});
     const exitCoordinates = [4, 4];
 
-    document.onkeydown = function(evt) {
+    document.onkeydown = (evt) => {
         const {position: {x, y}} = player;
-        evt = evt || window.event;
-        if (evt.ctrlKey && evt.keyCode == 90) {
-            alert("Ctrl-Z");
-        }
         switch (evt.key) {
             case 'ArrowDown':
                 if (y < 8) {
