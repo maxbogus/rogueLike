@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import { GameResult, GameState, PlayerState } from '../Types';
+import {GameResult, GameState, PlayerState} from '../Types';
+import {useStyles} from "./styles";
 
 interface GameProps {
     returnBack(): void;
@@ -7,19 +8,22 @@ interface GameProps {
 }
 
 const gameMap = [
-    ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
-    ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
-    ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
-    ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
-    ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
-    ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
-    ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
-    ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
-    ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
+    ['#', '#', '#', '#', '#', '#', '#', '#', '#'],
+    ['#', '.', '.', '.', '.', '.', '.', '.', '#'],
+    ['#', '*', '.', '.', '.', '.', '.', '.', '#'],
+    ['#', '*', '*', '.', '.', '.', 'P', '.', '#'],
+    ['#', '.', '^', '.', '.', '>', '.', '.', '#'],
+    ['#', '.', '.', '.', '.', '.', '.', '.', '#'],
+    ['#', '.', '^', '.', '.', '.', '*', '.', '#'],
+    ['#', '.', '*', '.', '*', '.', '.', '.', '#'],
+    ['#', '#', '#', '#', '#', '#', '#', '#', '#'],
 ];
 
+const drawTiles = ({position}, rowIndex, columnIndex) => (position.y === rowIndex && position.x === columnIndex) ? '@' : gameMap[rowIndex][columnIndex];
+
 export const Game = ({returnBack, submitResult}: GameProps) => {
-    const [player, updatePlayer] = useState<PlayerState>({lives: 10, attack: 2, defence: 2, position: {x: 0, y: 0}});
+    const {tile, map} = useStyles();
+    const [player, updatePlayer] = useState<PlayerState>({lives: 10, attack: 2, defence: 2, position: {x: 1, y: 1}});
     const [game, updateGame] = useState<GameState>({floor: 0});
     const exitCoordinates = [4, 4];
 
@@ -27,7 +31,7 @@ export const Game = ({returnBack, submitResult}: GameProps) => {
         const {position: {x, y}} = player;
         switch (evt.key) {
             case 'ArrowDown':
-                if (y < 8) {
+                if (y < 7) {
                     updatePlayer({
                         ...player,
                         position: {
@@ -38,7 +42,7 @@ export const Game = ({returnBack, submitResult}: GameProps) => {
                 }
                 break;
             case 'ArrowUp':
-                if (y > 0) {
+                if (y > 1) {
                     updatePlayer({
                         ...player,
                         position: {
@@ -49,7 +53,7 @@ export const Game = ({returnBack, submitResult}: GameProps) => {
                 }
                 break;
             case 'ArrowLeft':
-                if (x > 0) {
+                if (x > 1) {
                     updatePlayer({
                         ...player,
                         position: {
@@ -60,7 +64,7 @@ export const Game = ({returnBack, submitResult}: GameProps) => {
                 }
                 break;
             case 'ArrowRight':
-                if (x < 8) {
+                if (x < 7) {
                     updatePlayer({
                         ...player,
                         position: {
@@ -75,12 +79,12 @@ export const Game = ({returnBack, submitResult}: GameProps) => {
                 break;
         }
         if (x === exitCoordinates[0] && y === exitCoordinates[1]) {
-            updateGame({floor: game.floor+1});
+            updateGame({floor: game.floor + 1});
             updatePlayer({
                 ...player,
                 position: {
-                    y: 0,
-                    x: 0
+                    y: 1,
+                    x: 1
                 }
             });
         }
@@ -95,19 +99,24 @@ export const Game = ({returnBack, submitResult}: GameProps) => {
     };
 
     return <>
-            <div onClick={returnBack}>Back</div>
-            <p />
-            <h2>Status</h2>
-            <div>Lives: {player.lives}. Floor: {game.floor}</div>
-            <p />
-            <div>
-            {gameMap.map((row, rowIndex) => 
-                <div key={rowIndex}>
-                    {
-                        row.map((block, columnIndex) => <span key={columnIndex}>{(player.position.y === rowIndex && player.position.x === columnIndex) ? '@' : '0'}</span>)
-                    }
-                </div>
-            )}
-            </div>
-        </>;
+        <div onClick={returnBack}>Back</div>
+        <p/>
+        <h2>Status</h2>
+        <div>Lives: {player.lives}. Floor: {game.floor}</div>
+        <p/>
+        <div className={map}>
+            {
+                gameMap.map((row, rowIndex) =>
+                    <div key={rowIndex}>
+                        {
+                            row.map((block, columnIndex) => {
+                                return <div className={tile}
+                                    key={columnIndex}>{drawTiles(player, rowIndex, columnIndex)}</div>;
+                            })
+                        }
+                    </div>
+                )
+            }
+        </div>
+    </>;
 };

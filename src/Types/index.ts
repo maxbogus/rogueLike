@@ -1,4 +1,3 @@
-
 interface GameResult {
     isWon: boolean;
     slainBy?: string;
@@ -17,7 +16,7 @@ interface GameState {
     floor: number
 }
 
- interface PlayerState  {
+interface PlayerState {
     lives: number;
     attack: number;
     defence: number;
@@ -25,7 +24,7 @@ interface GameState {
         x: number;
         y: number;
     }
- }
+}
 
 
 export {GameResult, GameScreen, GameState, PlayerState};
