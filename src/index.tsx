@@ -1,15 +1,15 @@
 import React, {useState} from 'react';
 import {createRoot} from 'react-dom/client';
 
-import { GameResult } from './Types';
+import { GameResult, GameScreen } from './Types';
 import { Results } from './Results';
 import { Help } from './Help';
 import { Game } from './Game';
 
-const menuItems = ['Game', 'Results', 'Help'];
+const menuItems = [GameScreen.Game, GameScreen.Results, GameScreen.Help];
 
 const App = () => {
-    const [selectedState, updateState] = useState<string>('Menu');
+    const [selectedState, updateState] = useState<string>(GameScreen.Menu);
     const [results, updateResults] = useState<GameResult[]>([]);
 
     const renderMenu = () => <>
@@ -20,16 +20,16 @@ const App = () => {
         </ul>
     </>;
 
-    const showState = (currentState: string) => {
+    const showState = (currentState: GameScreen) => {
         switch (currentState) {
-            case 'Help': {
-                return <Help returnBack={() => {updateState('Menu')}} />;
+            case GameScreen.Help: {
+                return <Help returnBack={() => {updateState(GameScreen.Menu)}} />;
             }
-            case 'Game': {
-                return <Game returnBack={() => {updateState('Menu')}} submitResult={(result) => {updateResults([...results, result])}} />;
+            case GameScreen.Game: {
+                return <Game returnBack={() => {updateState(GameScreen.Menu)}} submitResult={(result) => {updateResults([...results, result])}} />;
             }
-            case 'Results': {
-                return <Results returnBack={() => {updateState('Menu')}} results={results} />;
+            case GameScreen.Results: {
+                return <Results returnBack={() => {updateState(GameScreen.Menu)}} results={results} />;
             }
             default: {
                 return renderMenu();

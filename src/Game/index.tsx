@@ -1,24 +1,10 @@
 import React, {useState} from 'react';
-import { GameResult } from '../Types';
+import { GameResult, GameState, PlayerState } from '../Types';
 
 interface GameProps {
     returnBack(): void;
     submitResult(result: GameResult): void;
 }
-
-interface GameState {
-    floor: number
-}
-
- interface PlayerState  {
-    lives: number;
-    attack: number;
-    defence: number;
-    position: {
-        x: number;
-        y: number;
-    }
- }
 
 const gameMap = [
     ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
