@@ -1,5 +1,5 @@
 import esbuild from 'esbuild';
-import {copyFile} from 'fs/promises';
+import {copyStatic} from './utils.js';
 
 const context = await esbuild.context({
   entryPoints: ['src/index.tsx'],
@@ -9,10 +9,10 @@ const context = await esbuild.context({
 
 await context.watch();
 
+await copyStatic();
+
 const {host, port} = await context.serve({
   servedir: 'dist'
 })
 
 console.log(`Serving app on http://${host}:${port}/`);
-await copyFile('static/index.html', 'dist/index.html');
-

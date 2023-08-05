@@ -1,5 +1,5 @@
 import esbuild from 'esbuild';
-import {copyFile} from 'fs/promises';
+import {copyStatic} from './utils.js';
 
 await esbuild.build({
   entryPoints: ['src/index.tsx'],
@@ -7,9 +7,4 @@ await esbuild.build({
   outdir: 'dist',
 });
 
-const files = ['index.html', 'icon.svg'];
-
-files.forEach(async (file) => {
-    await copyFile(`static/${file}`, `dist/${file}`);
-  })
-
+await copyStatic();
